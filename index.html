@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Chemistry Lab</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="floating-shapes">
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="atom" style="top: 15%; right: 8%;"></div>
+  <div class="atom" style="bottom: 25%; left: 12%;"></div>
+  <div class="atom" style="top: 70%; right: 20%;"></div>
+</div>
+
+<nav>
+  <h2>🧪 ChemLab</h2>
+  <div class="nav-buttons">
+    <button onclick="scrollToLab()">Start Experiment</button>
+    <button onclick="openSettings()" class="settings-btn">⚙️ Settings</button>
+  </div>
+</nav>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Settings</h3>
+      <span class="close" onclick="closeSettings()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="setting-group">
+        <h4>Theme</h4>
+        <div class="theme-options">
+          <div class="theme-option" data-theme="light" onclick="setTheme('light')">
+            <div class="theme-preview light-preview"></div>
+            <span>Light</span>
+          </div>
+          <div class="theme-option" data-theme="dark" onclick="setTheme('dark')">
+            <div class="theme-preview dark-preview"></div>
+            <span>Dark</span>
+          </div>
+          <div class="theme-option" data-theme="science" onclick="setTheme('science')">
+            <div class="theme-preview science-preview"></div>
+            <span>Science</span>
+          </div>
+          <div class="theme-option" data-theme="ocean" onclick="setTheme('ocean')">
+            <div class="theme-preview ocean-preview"></div>
+            <span>Ocean</span>
+          </div>
+        </div>
+      </div>
+      <div class="setting-group">
+        <h4>Background Animation</h4>
+        <label class="toggle">
+          <input type="checkbox" id="bgAnimation" checked onchange="toggleBgAnimation()">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">Enable floating elements</span>
+      </div>
+      <div class="setting-group">
+        <h4>Sound Effects</h4>
+        <label class="toggle">
+          <input type="checkbox" id="soundEffects" onchange="toggleSound()">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">Enable reaction sounds</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <h1>Virtual Chemistry Lab</h1>
+  <p>Mix chemicals. See reactions. Learn instantly.</p>
+</section>
+
+<section class="lab" id="lab">
+  <h2>⚗️ Lab Simulator</h2>
+
+  <div class="lab-container">
+    <aside class="chemicals-sidebar">
+      <h3>Chemical Elements</h3>
+      <input type="text" id="searchInput" placeholder="Search chemicals..." onkeyup="filterChemicals()">
+      <div class="chemicals" id="chemicalsList">
+        <button onclick="selectChem('acid')" data-name="Acid"><img src="images/acid.png" alt="Acid"><br>Acid</button>
+        <button onclick="selectChem('base')" data-name="Base"><img src="images/base.png" alt="Base"><br>Base</button>
+        <button onclick="selectChem('metal')" data-name="Metal"><img src="images/metal.png" alt="Metal"><br>Metal</button>
+        <button onclick="selectChem('carbonate')" data-name="Carbonate"><img src="images/carbonate.png" alt="Carbonate"><br>Carbonate</button>
+        <button onclick="selectChem('water')" data-name="Water"><img src="images/water.png" alt="Water"><br>Water</button>
+        <button onclick="selectChem('salt')" data-name="Salt"><img src="images/salt.png" alt="Salt"><br>Salt</button>
+        <button onclick="selectChem('oxygen')" data-name="Oxygen"><img src="images/oxygen.png" alt="Oxygen"><br>Oxygen</button>
+        <button onclick="selectChem('hydrogen')" data-name="Hydrogen"><img src="images/hydrogen.png" alt="Hydrogen"><br>Hydrogen</button>
+        <button onclick="selectChem('sugar')" data-name="Sugar"><img src="images/sugar.png" alt="Sugar"><br>Sugar</button>
+        <button onclick="selectChem('copper')" data-name="Copper"><img src="images/copper.svg" alt="Copper"><br>Copper</button>
+        <button onclick="selectChem('iron')" data-name="Iron"><img src="images/iron.svg" alt="Iron"><br>Iron</button>
+        <button onclick="selectChem('sodium')" data-name="Sodium"><img src="images/sodium.svg" alt="Sodium"><br>Sodium</button>
+        <button onclick="selectChem('chlorine')" data-name="Chlorine"><img src="images/chlorine.svg" alt="Chlorine"><br>Chlorine</button>
+        <button onclick="selectChem('ethanol')" data-name="Ethanol"><img src="images/ethanol.svg" alt="Ethanol"><br>Ethanol</button>
+        <button onclick="selectChem('vinegar')" data-name="Vinegar"><img src="images/vinegar.svg" alt="Vinegar"><br>Vinegar</button>
+      </div>
+    </aside>
+
+    <div class="main-lab">
+      <div class="beaker" id="beaker">
+        <p id="beakerText">Add chemicals</p>
+        <div id="bubbles"></div>
+        <div id="flame"></div>
+        <div id="particles"></div>
+      </div>
+
+      <div class="controls">
+        <div class="temperature-control">
+          <label for="tempSlider">Temperature: <span id="tempValue">25</span>°C</label>
+          <input type="range" id="tempSlider" min="0" max="1000" value="25" oninput="updateTemperature()">
+        </div>
+        <button onclick="clearBeaker()">Clear Beaker</button>
+      </div>
+
+      <button class="mix" onclick="mix()">Mix</button>
+    </div>
+  </div>
+
+  <div id="result"></div>
+  <div id="explanation"></div>
+</section>
+
+<section class="learn">
+  <h2>📚 Learn Chemistry</h2>
+  <p>Chemical reactions involve the rearrangement of atoms to form new substances with different properties. In this lab, explore various reaction types and their real-world applications.</p>
+  <ul>
+    <li><strong>Neutralization:</strong> Acids react with bases to form salts and water. This is an exothermic reaction used in antacids and wastewater treatment. Example: HCl + NaOH → NaCl + H₂O</li>
+    <li><strong>Metal Displacement:</strong> Active metals react with acids to produce hydrogen gas and metal salts. This demonstrates the reactivity series of metals. Example: Zn + 2HCl → ZnCl₂ + H₂</li>
+    <li><strong>Carbonate Decomposition:</strong> Acids react with carbonates to release carbon dioxide gas, water, and salts. This is used in baking soda reactions. Example: 2HCl + CaCO₃ → CaCl₂ + CO₂ + H₂O</li>
+    <li><strong>Dissolution:</strong> Ionic compounds dissolve in polar solvents like water, forming aqueous solutions. This process involves hydration of ions. Example: NaCl(s) → Na⁺(aq) + Cl⁻(aq)</li>
+    <li><strong>Combustion:</strong> Organic compounds burn in oxygen to produce carbon dioxide and water. Requires activation energy (heat). Example: 2H₂ + O₂ → 2H₂O</li>
+    <li><strong>Thermal Decomposition:</strong> Some compounds break down when heated. Water boils at 100°C, while sugars undergo caramelization around 150-200°C.</li>
+  </ul>
+</section>
+
+<section class="quiz">
+  <h2>🧠 Chemistry Quiz</h2>
+  <p>Test your knowledge with these chemistry questions!</p>
+  <div class="quiz-question">
+    <p><strong>1. What is the chemical formula for water?</strong></p>
+    <button onclick="checkAnswer(1, 'H2O')">H2O</button>
+    <button onclick="checkAnswer(1, 'CO2')">CO2</button>
+    <button onclick="checkAnswer(1, 'NaCl')">NaCl</button>
+    <button onclick="checkAnswer(1, 'O2')">O2</button>
+  </div>
+  <div class="quiz-question">
+    <p><strong>2. Which gas is produced when acids react with carbonates?</strong></p>
+    <button onclick="checkAnswer(2, 'CO2')">CO2</button>
+    <button onclick="checkAnswer(2, 'H2')">H2</button>
+    <button onclick="checkAnswer(2, 'O2')">O2</button>
+    <button onclick="checkAnswer(2, 'N2')">N2</button>
+  </div>
+  <div class="quiz-question">
+    <p><strong>3. What type of reaction occurs when zinc reacts with hydrochloric acid?</strong></p>
+    <button onclick="checkAnswer(3, 'Displacement')">Displacement</button>
+    <button onclick="checkAnswer(3, 'Neutralization')">Neutralization</button>
+    <button onclick="checkAnswer(3, 'Combustion')">Combustion</button>
+    <button onclick="checkAnswer(3, 'Decomposition')">Decomposition</button>
+  </div>
+  <div class="quiz-question">
+    <p><strong>4. At what temperature does water typically boil at sea level?</strong></p>
+    <button onclick="checkAnswer(4, '100°C')">100°C</button>
+    <button onclick="checkAnswer(4, '0°C')">0°C</button>
+    <button onclick="checkAnswer(4, '50°C')">50°C</button>
+    <button onclick="checkAnswer(4, '200°C')">200°C</button>
+  </div>
+  <div class="quiz-question">
+    <p><strong>5. What is the main product of combustion reactions involving hydrocarbons?</strong></p>
+    <button onclick="checkAnswer(5, 'CO2 and H2O')">CO2 and H2O</button>
+    <button onclick="checkAnswer(5, 'H2 and O2')">H2 and O2</button>
+    <button onclick="checkAnswer(5, 'NaCl and H2O')">NaCl and H2O</button>
+    <button onclick="checkAnswer(5, 'CO and H2')">CO and H2</button>
+  </div>
+  <p id="quiz-result"></p>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
